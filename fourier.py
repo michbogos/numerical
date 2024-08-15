@@ -2,7 +2,7 @@ from scipy import fft
 import numpy as np
 import matplotlib.pyplot as plt
 
-x = np.linspace(0, 1, 16)
+x = np.linspace(0, 1, 256)
 y = np.sin(x)
 fourier = fft.fft(y)
 
