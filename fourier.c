@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<math.h>
 #include<complex.h>
+#include<stdlib.h>
 
 #define SIZE 4096
 #define PI 3.141592653589
@@ -26,18 +27,28 @@ void dft(float* x, complex* X, int N){
 }
 
 //Broken
-void ditfft(float* x, complex* X, int N, int s){
+complex* ditfft(complex* x, int N){
     if(N==1){
-        X[0] = x[0];
+        return x;
     }
-    ditfft(x, X, N/2, 2*s);
-    ditfft(x+s, X+s, N/2, 2*s);
+    complex* xe = malloc(sizeof(complex)*N/2);
+    complex* xo = malloc(sizeof(complex)*N/2);
+    for(int i = 0; i < N; i++){
+        if(i%2)
+            xo[i/2] = x[i];
+        else
+            xe[i/2] = x[i];
+    }
+    ditfft(xe, N/2);
+    ditfft(xo, N/2);
+    complex* X = malloc(sizeof(complex)*N); 
     for(int k = 0; k < N/2; k++){
         complex p = X[k];
         complex q = cexpf((-2*PI*I/N)*k)*X[k+N/2];
         X[k] = p+q;
         X[k+N/2] = p-q;
     }
+    return X;
 }
 
 void fft(complex* x, int N){
@@ -80,9 +91,9 @@ int main(){
             x[i] = 0;
         }
     }
-    fft(x, SIZE);
+    complex* res = ditfft(x, SIZE);
     for(int i = 0 ; i < SIZE; i++){
-        printf("%f\n", cabsf(x[i]));
+        printf("%f\n", cabsf(res[i]));
     }
     return 0;
 }
