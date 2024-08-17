@@ -3,7 +3,7 @@
 #include<complex.h>
 #include<stdlib.h>
 
-#define SIZE 4096
+#define SIZE 16
 #define PI 3.141592653589
 
 
@@ -81,8 +81,7 @@ void fft(complex* x, int N){
 }
 
 int main(){
-    complex x[SIZE];
-    complex X[SIZE];
+    float x[SIZE];
     for(int i = 0; i < SIZE; i++){
         if((i/101)%2){
             x[i] = 1;
@@ -91,9 +90,9 @@ int main(){
             x[i] = 0;
         }
     }
-    complex* res = ditfft(x, SIZE);
+    dct(x, SIZE);
     for(int i = 0 ; i < SIZE; i++){
-        printf("%f\n", cabsf(res[i]));
+        printf("%f\n", x[i]);
     }
     return 0;
 }
