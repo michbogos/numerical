@@ -34,3 +34,18 @@ void matmul(float* A, float* B, float* C, int N, int M, int K){
         }
     }
 }
+
+void gauss_jord(float A[], int N, int M){ // Linear equation in matrix form with appended solution
+    for(int i = 0; i < N; i++){
+        float coeff = A[i*M+i];
+        for(int j = i; j < M; j++){
+            A[i*M+j]/=coeff;
+        }
+        for(int k = i+1; k < N; k++){
+            float subcoeff = A[k*M+i]/coeff;
+            for(int  l = i; l < M; l++){
+                A[k*M+l]-=subcoeff*A[i*M+l];
+            }
+        }
+    }
+}
