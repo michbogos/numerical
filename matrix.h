@@ -1,4 +1,5 @@
 #include<immintrin.h>
+#include<math.h>
 
 void matmul(float* A, float* B, float* C, int N, int M, int K){
     int masks[16];
@@ -35,6 +36,17 @@ void matmul(float* A, float* B, float* C, int N, int M, int K){
     }
 }
 
+void pivot_row(float A[], int N, int M, int row1, int row2){
+    float tmp[M];
+    for(int i = 0; i < M; i++){
+        tmp[i] = A[row1*M+i];
+        A[row1*M+i] = A[row2*M+i];
+    }
+    for(int i = 0; i < M; i++){
+        A[row2*M+i] = tmp[i];
+    }
+}
+
 void gauss_jord(float A[], int N, int M){ // Linear equation in matrix form with appended solution
     for(int i = 0; i < N; i++){
         float coeff = A[i*M+i];
@@ -42,9 +54,27 @@ void gauss_jord(float A[], int N, int M){ // Linear equation in matrix form with
             A[i*M+j]/=coeff;
         }
         for(int k = i+1; k < N; k++){
+            if(fabsf(A[k*M+i]) < 0.0001){
+                int idx = k;
+                float mag = 0.0f;
+                for(int m = k; m < N; m++){
+                    if(fabsf(A[m*M+i])>mag){
+                        idx = m;
+                        mag = fabsf(A[m*M+i]);
+                    }
+                }
+                pivot_row(A, N, M, k, idx);
+            }
             float subcoeff = A[k*M+i]/coeff;
             for(int  l = i; l < M; l++){
                 A[k*M+l]-=subcoeff*A[i*M+l];
+                for(int ii = 0; ii < 2; ii++){
+                    for(int jj = 0; jj < 3; jj++){
+                        printf("%f ", A[ii*3+jj]);
+                    }
+                    printf("\n");
+                }
+                printf("\n");
             }
         }
     }
