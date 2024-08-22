@@ -67,15 +67,6 @@ void gauss_jord(float A[], int N, int M){ // Linear equation in matrix form with
         for(int j = i; j < M; j++){
             A[i*M+j]/=coeff;
         }
-
-        for(int ii = 0; ii < N; ii++){
-                for(int jj = 0; jj < M; jj++){
-                    printf("%f ", A[ii*M+jj]);
-                }
-                printf("\n");
-            }
-            printf("\n");
-
         for(int k = i+1; k < N; k++){
             if(fabsf(A[k*M+i]) < 0.0001){
                 if(fabsf(A[k*M+i]) < 0.0001 && k==N-1){
@@ -99,13 +90,6 @@ void gauss_jord(float A[], int N, int M){ // Linear equation in matrix form with
                 A[k*M+l]-=subcoeff*A[i*M+l];
             }
         }
-        for(int ii = 0; ii < N; ii++){
-                for(int jj = 0; jj < M; jj++){
-                    printf("%f ", A[ii*M+jj]);
-                }
-                printf("\n");
-            }
-            printf("\n");
     }
 
     for(int i = N; i >= 0; i--){
