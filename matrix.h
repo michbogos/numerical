@@ -53,8 +53,21 @@ void gauss_jord(float A[], int N, int M){ // Linear equation in matrix form with
         for(int j = i; j < M; j++){
             A[i*M+j]/=coeff;
         }
+
+        for(int ii = 0; ii < N; ii++){
+                for(int jj = 0; jj < M; jj++){
+                    printf("%f ", A[ii*M+jj]);
+                }
+                printf("\n");
+            }
+            printf("\n");
+
         for(int k = i+1; k < N; k++){
             if(fabsf(A[k*M+i]) < 0.0001){
+                if(fabsf(A[k*M+i]) < 0.0001 && k==N-1){
+                    continue;
+                }
+                printf("Pivoting");
                 int idx = k;
                 float mag = 0.0f;
                 for(int m = k; m < N; m++){
@@ -65,17 +78,30 @@ void gauss_jord(float A[], int N, int M){ // Linear equation in matrix form with
                 }
                 pivot_row(A, N, M, k, idx);
             }
-            float subcoeff = A[k*M+i]/coeff;
+            float subcoeff = A[k*M+i];
+            if(fabsf(subcoeff) < 0.0001f){
+                continue;
+            }
             for(int  l = i; l < M; l++){
                 A[k*M+l]-=subcoeff*A[i*M+l];
-                for(int ii = 0; ii < 2; ii++){
-                    for(int jj = 0; jj < 3; jj++){
-                        printf("%f ", A[ii*3+jj]);
-                    }
-                    printf("\n");
+            }
+        }
+        for(int ii = 0; ii < N; ii++){
+                for(int jj = 0; jj < M; jj++){
+                    printf("%f ", A[ii*M+jj]);
                 }
                 printf("\n");
             }
+            printf("\n");
+    }
+
+    for(int i = N; i >= 0; i--){
+        float coeff = A[(i-1)*M+i];
+        if(fabsf(coeff) < 0.0001f){
+            continue;
+        }
+        for(int j = i; j < M; j++){
+            A[(i-1)*M+j] -= coeff*A[i*M+j];
         }
     }
 }
