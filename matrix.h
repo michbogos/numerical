@@ -49,7 +49,21 @@ void pivot_row(float A[], int N, int M, int row1, int row2){
 
 void gauss_jord(float A[], int N, int M){ // Linear equation in matrix form with appended solution
     for(int i = 0; i < N; i++){
+        if(fabs(A[i*M+i])<0.0001f){
+            int idx = i;
+            float mag = 0.0f;
+            for(int m = i; m < N; m++){
+                if(fabsf(A[m*M+i])>mag){
+                    idx = m;
+                    mag = fabsf(A[m*M+i]);
+                }
+            }
+            pivot_row(A, N, M, i, idx);
+        }
         float coeff = A[i*M+i];
+        if(fabs(coeff)<0.00001){
+            continue;
+        }
         for(int j = i; j < M; j++){
             A[i*M+j]/=coeff;
         }
@@ -67,7 +81,6 @@ void gauss_jord(float A[], int N, int M){ // Linear equation in matrix form with
                 if(fabsf(A[k*M+i]) < 0.0001 && k==N-1){
                     continue;
                 }
-                printf("Pivoting");
                 int idx = k;
                 float mag = 0.0f;
                 for(int m = k; m < N; m++){
