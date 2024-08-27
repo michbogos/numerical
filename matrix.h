@@ -92,13 +92,31 @@ void gauss_jord(float A[], int N, int M){ // Linear equation in matrix form with
         }
     }
 
-    for(int i = N; i >= 0; i--){
+    for(int i = N-1; i >= 0; i--){
+        if(fabsf(A[i*M+i])<0.00001f) continue;
         float coeff = A[(i-1)*M+i];
-        if(fabsf(coeff) < 0.0001f){
-            continue;
-        }
         for(int j = i; j < M; j++){
             A[(i-1)*M+j] -= coeff*A[i*M+j];
+        }
+    }
+}
+
+void lu_decomp(float A[], float* alpha, float*  beta, int N, int M){
+    for(int i = 0; i < N; i++){
+        alpha[i*M+i] = 1.0f;
+    }
+
+    for(int i = 0; i < N; i++){
+        for(int j = 0; j < M; j++){
+            beta[i*M+j] = A[i*M+j];
+            for(int k = 0; k < i-1; k++){
+                beta[i*M+j] -= alpha[i*M+k]*beta[k*M+j];
+            }
+            alpha[i*M+j] = A[i*M+j];
+            for(int k = 0; k < j-1; k++){
+                alpha[i*M+j] -= alpha[i*M+k]*beta[k*M+j];
+            }
+            alpha[i*M+j] /= beta[j*M+j];
         }
     }
 }
