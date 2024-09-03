@@ -34,11 +34,12 @@ struct mp_num mp_add(struct mp_num a, struct mp_num b){
     }
     if(carry && (minsize==maxsize)){
         mp_resize(&c);
-        c.data[minsize+1] = carry;
+        c.data[minsize] = carry;
     }
     if(carry && (minsize < maxsize)){
-        c.data[minsize+1] = carry;
+        c.data[minsize] = carry;
     }
+    return c;
 }
 
 struct mp_num mp_sub(struct mp_num a, struct mp_num b){
@@ -46,6 +47,8 @@ struct mp_num mp_sub(struct mp_num a, struct mp_num b){
     unsigned char carry = 0;
     unsigned int maxsize = a.size > b.size ? a.size : b.size;
     unsigned int minsize = a.size < b.size ? a.size : b.size;
+
+    c = mp_zero(maxsize);
 
     for(int i = 0; i < minsize; i++){
         unsigned char tmpa = a.data[i];
@@ -55,13 +58,31 @@ struct mp_num mp_sub(struct mp_num a, struct mp_num b){
     }
     if(carry && (minsize==maxsize)){
         mp_resize(&c);
-        c.data[minsize+1] -= carry;
+        c.data[minsize] -= carry;
     }
     if(carry && (minsize < maxsize)){
-        c.data[minsize+1] -= carry;
+        c.data[minsize] -= carry;
     }
+    return c;
 }
 
+struct mp_num mp_smul(struct mp_num a, unsigned char b){
+    struct mp_num c;
+    unsigned char carry = 0;
+    unsigned int size = a.size;
+
+    c = mp_zero(size);
+
+    for(int i = 0; i < size; i++){
+        c.data[i] = a.data[i]*b+carry;
+        carry = (int)(a.data[i]*b+carry)-c.data[i];
+    }
+    if(carry){
+        mp_resize(&c);
+        c.data[size] -= carry;
+    }
+    return c;
+}
 
 
 void mp_free(struct mp_num num){
