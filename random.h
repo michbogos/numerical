@@ -10,3 +10,7 @@ unsigned int rand_uint(struct rand_state* rng){
     unsigned int rot = oldstate >> 59u;
     return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
 }
+
+float randf(struct rand_state* rng, float min, float max){
+    return max > min ? min+((float)rand_uint(rng)/(float)(__UINT32_MAX__))*(max-min) : max+((float)rand_uint(rng)/(float)(__UINT32_MAX__))*(min-max);
+}
