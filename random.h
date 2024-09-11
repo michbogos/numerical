@@ -1,3 +1,5 @@
+#include<math.h>
+
 struct rand_state{
     unsigned long long state;
     unsigned long long inc;
@@ -13,4 +15,16 @@ unsigned int rand_uint(struct rand_state* rng){
 
 float randf(struct rand_state* rng, float min, float max){
     return max > min ? min+((float)rand_uint(rng)/(float)(__UINT32_MAX__))*(max-min) : max+((float)rand_uint(rng)/(float)(__UINT32_MAX__))*(min-max);
+}
+
+float exp_randf(struct rand_state* rng, float beta){
+    return logf(randf(rng, 0, 1))/beta;
+}
+
+float norm_randf(struct rand_state* rng){
+    return sqrtf(-2*logf(randf(rng, 0, 1)))*cos(2*M_PI*randf(rng, 0, 1));
+}
+
+float rayleigh_randf(struct rand_state* rng){
+    return sqrtf(2*logf(randf(rng, 0, 1)));
 }
