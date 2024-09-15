@@ -1,6 +1,18 @@
 #include<immintrin.h>
 #include<math.h>
 
+float* mat_translate4x4(){
+
+}
+
+float* mat_scale4x4(){
+
+}
+
+float* mat_rotation4x4(){
+
+}
+
 void matmul(float* A, float* B, float* C, int N, int M, int K){
     int masks[16];
     for(int i = 0; i < 8; i++){
@@ -119,4 +131,8 @@ void lu_decomp(float A[], float* alpha, float*  beta, int N, int M){
             alpha[i*M+j] /= beta[j*M+j];
         }
     }
+}
+
+void mat_free(float* mat){
+    free(mat);
 }
